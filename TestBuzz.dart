@@ -45,6 +45,7 @@ void main() {
    */
   
   var sound = new Sound(['sounds/ding.wav','sounds/truck.ogg']);
+  sound.bind(['ended'], function() { window.alert(''); });
   sound.play();
   
   
