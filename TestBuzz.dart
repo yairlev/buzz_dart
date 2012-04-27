@@ -28,9 +28,15 @@ void main() {
   
   
   /*
-   * Tests for the Sund class
+   * Yair's Tests for the Sund class
    */
   
-  var sound = new Sound(['sounds/ding.wav','sounds/truck.ogg']);
+  var sound = new Sound(['sounds/ding.wav','sounds/truck.ogg'], new SoundOptions(null, null, null, true));
   sound.play();
+  
+  
+  /*
+  * Yoad's Tests for the Sund class
+  */
+  
 }
