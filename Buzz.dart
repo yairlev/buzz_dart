@@ -111,19 +111,13 @@ class Buzz {
     return retVal;
   }
 
-  num toPercent( value, total, decimal ) {
-    /*
-    var r = Math.pow( 10, decimal || 0 );
-    return Math.round( ( ( value * 100 ) / total ) * r ) / r;
-    */
-    return 0;
+  num toPercent( num value, num total, [num decimal = 0] ) {
+    var r = Math.pow( 10, decimal );
+    return ( ( ( value * 100 ) / total ) * r ).round() / r;
   }
 
-  num fromPercent( percent, total, decimal ) {
-    /*
-    var r = Math.pow( 10, decimal || 0 );
-    return  Math.round( ( ( total / 100 ) * percent ) * r ) / r;
-    */
-    return 0;
+  num fromPercent( num percent, num total, [num decimal = 0] ) {
+    var r = Math.pow( 10, decimal );
+    return  ( ( ( total / 100 ) * percent ) * r ).round() / r;
   }
 }
