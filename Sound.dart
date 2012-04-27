@@ -5,8 +5,11 @@ class Sound {
   var source;
   SoundOptions options;
   List<AudioElement> soundElements;
+  bool supported;
    
   Sound (var source, [SoundOptions options = const SoundOptions()]) {
+    
+    this.supported = Buzz.Instance.isSupported;
     
     this.soundElements = new List<AudioElement>();
     
@@ -38,7 +41,7 @@ class Sound {
   }
   
   Sound load() {
-      if (! Buzz.Instance.isSupported) {
+      if (! supported) {
         return this;
       }
       
@@ -47,7 +50,7 @@ class Sound {
   }
   
   Sound play() { 
-    if (! Buzz.Instance.isSupported) {
+    if (! supported) {
       return this;
     }
     
