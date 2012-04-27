@@ -44,7 +44,7 @@ void main() {
    * Yair's Tests for the Sund class
    */
   
-  var sound = new Sound(['sounds/ding.wav','sounds/truck.ogg'], new SoundOptions(null, null, null, true));
+  var sound = new Sound(['sounds/ding.wav','sounds/truck.ogg']);
   sound.play();
   
   
