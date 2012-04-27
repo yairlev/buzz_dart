@@ -1,0 +1,25 @@
+.rangeOption {
+  float: initial;
+  width: 150px;
+}
+
+.rangeOption input {
+  display:block;
+  width: 100%;
+}
+
+.rangeOption .minLabel {
+  float: left;
+}
+
+.rangeOption .minLabel label {
+  margin-left: -50%;
+}
+
+.rangeOption .maxLabel {
+  float: right;
+}
+
+.rangeOption .maxLabel label {
+  margin-left: 50%;
+}
