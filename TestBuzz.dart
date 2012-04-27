@@ -51,5 +51,14 @@ void main() {
   /*
   * Yoad's Tests for the Sund class
   */
+  Sound ysound = new Sound('sounds/song.ogg', new SoundOptions(
+    const ['mp3', 'ogg', 'wav', 'aac', 'm4a'],
+    'metadata', false, false, 80
+  ));
   
+  ButtonElement test1b = document.query("#playSong");
+  test1b.on.click.add((Event e) { 
+      ysound.play();
+    }
+  );  
 }
