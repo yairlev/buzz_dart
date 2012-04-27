@@ -471,10 +471,31 @@ class Sound {
   }
   
   void whenReady(Function func) {
-    
+    if ( !supported ) {
+      return null;
+    }
+
+    var that = this;
+    if (this.sound.readyState != null && this.sound.readyState == 0 ) {
+        this.bind( const ['canplay.buzzwhenready'], func);
+    } else {
+        func();
+    }
   }
   
   //Privates
+  function _timerangeToArray( timeRange ) {
+    var array = [],
+        length = timeRange.length - 1;
+
+    for( var i = 0; i <= length; i++ ) {
+        array.push({
+            start: timeRange.start( length ),
+            end: timeRange.end( length )
+        });
+    }
+    return array;
+}
   
   String _getExt( String filename ) {
     return filename.split('.').last();
