@@ -534,14 +534,14 @@ class SoundOptions {
    final num volume;
    
    const SoundOptions([this.formats = const ['mp3', 'ogg', 'wav', 'aac', 'm4a'], 
-       this.preload='metadata', this.autoplay=true, this.loop=false, this.volume = 80]);       
+       this.preload='metadata', this.autoplay=false, this.loop=false, this.volume = 80]);       
    
 }
 
 class SoundEvent {
   String idx;
   String type;
-  Func func;
+  Function func;
   
   SoundEvent(this.idx, this.type, this.func);
   
