@@ -21,7 +21,7 @@ class Buzz {
       "m4a": "audio/x-m4a"
   };
   
-  static var sounds = const [];
+  static var sounds = null;
   
   //
   // Instance Properties
@@ -44,6 +44,8 @@ class Buzz {
   }
 
   Buzz._internal() {
+    sounds = new List<Sound>();
+    
     // Create the audio tag
     _el = new Element.tag("audio");
     

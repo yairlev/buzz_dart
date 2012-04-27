@@ -127,7 +127,7 @@ class Sound {
       return this;
     }
 
-    this.sound.atttributes['loop'] = 'loop';
+    this.sound.attributes['loop'] = 'loop';
     this.bind( const ['ended.buzzloop'], function() {
         this.currentTime = 0;
         this.play();
@@ -140,7 +140,7 @@ class Sound {
       return this;
     }
 
-    this.sound.removeAttribute( 'loop' );
+    this.sound.attributes.remove( 'loop' );
     this.unbind( const ['ended.buzzloop'] );
     return this;
   }
@@ -180,20 +180,20 @@ class Sound {
     return this.sound.muted;
   }
   
-  Sound setVolume(num volume) {
+  Sound setVolume(num newVolume) {
     if ( !supported ) {
       return this;
     }
 
-    if ( volume < 0 ) {
-      volume = 0;
+    if ( newVolume < 0 ) {
+      newVolume = 0;
     }
-    if ( volume > 100 ) {
-      volume = 100;
+    if ( newVolume > 100 ) {
+      newVolume = 100;
     }
   
-    this.volume = volume;
-    this.sound.volume = volume / 100;
+    this.volume = newVolume;
+    this.sound.volume = newVolume / 100;
     return this;
   }
   
@@ -230,7 +230,7 @@ class Sound {
     }
 
     num time = ( this.sound.currentTime * 100 ).round() / 100;
-    return ( time ).isNaN() ? Buzz.defaults.placeholder : time;
+    return ( time ).isNaN() ? Buzz.defaults['placeholder'] : time;
   }
   
   Sound setPercent(num percent) {
@@ -247,7 +247,7 @@ class Sound {
     }
 
     num percent = ( Buzz.Instance.toPercent( this.sound.currentTime, this.sound.duration ) ).round();
-    return ( percent ).isNaN() ? Buzz.defaults.placeholder : percent;
+    return ( percent ).isNaN() ? Buzz.defaults['placeholder'] : percent;
   }
   
   Sound setSpeed(num duration) {
@@ -272,7 +272,7 @@ class Sound {
     }
 
     num duration = ( this.sound.duration * 100 ).round() / 100;
-    return ( duration ).isNaN() ? Buzz.defaults.placeholder : duration;
+    return ( duration ).isNaN() ? Buzz.defaults['placeholder'] : duration;
     
   }
   
@@ -301,7 +301,7 @@ class Sound {
   }
   
   num getErrorCode() {
-    if ( supported && this.sound.error ) {
+    if ( supported && this.sound.error != null ) {
       return this.sound.error.code;
     }
     return 0;
