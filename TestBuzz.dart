@@ -60,5 +60,29 @@ void main() {
   test1b.on.click.add((Event e) { 
       ysound.play();
     }
-  );  
+  );
+  
+  test1b = document.query("#pauseSong");
+  test1b.on.click.add((Event e) { 
+      ysound.pause();
+    }
+  ); 
+  
+  test1b = document.query("#stopSong");
+  test1b.on.click.add((Event e) { 
+      ysound.stop();
+    }
+  );
+  
+  
+  InputElement slider = document.query("#volumeSlider");
+  slider.on.change.add((Event e) {
+    ysound.setVolume(Math.parseInt(slider.value));
+  }, true);
+  
+  LabelElement label = document.query("#currTime");
+  window.setInterval(() {
+      label.text = "${Buzz.Instance.toTimer(ysound.getTime(), false)} (${ysound.getPercent()}%)";
+    }
+    , 1000);
 }
