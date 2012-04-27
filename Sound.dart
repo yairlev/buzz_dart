@@ -109,8 +109,9 @@ class Sound {
       return this;
     }
 
-    this.setTime( this.getDuration() );
+    //this.setTime( this.getDuration() );
     this.sound.pause();
+    this.setTime( 0 );
     return this; 
   }
   
@@ -218,8 +219,10 @@ class Sound {
       return this;
     }
 
-    this.whenReady( function() {
+    this.sound.currentTime = time;
+    this.whenReady( () {
         this.sound.currentTime = time;
+        print('kaka $time  ${this.sound.currentTime}');
     });
     return this;
   }
@@ -276,28 +279,29 @@ class Sound {
     
   }
   
-  getPlayed() {
+  
+  TimeRanges getPlayed() {
     if ( !supported ) {
       return null;
     }
 
-    return timerangeToArray( this.sound.played );
+    return this.sound.played;
   }
   
-  getBuffered() {
+  TimeRanges getBuffered() {
     if ( !supported ) {
       return null;
     }
 
-    return timerangeToArray( this.sound.buffered );
+    return this.sound.buffered;
   }
   
-  getSeekable() {
+  TimeRanges getSeekable() {
     if ( !supported ) {
       return null;
     }
 
-    return timerangeToArray( this.sound.seekable );
+    return this.sound.seekable;
   }
   
   num getErrorCode() {
@@ -515,18 +519,6 @@ class Sound {
   }
   
   //Privates
-  function _timerangeToArray( timeRange ) {
-    var array = [],
-        length = timeRange.length - 1;
-
-    for( var i = 0; i <= length; i++ ) {
-        array.push({
-            start: timeRange.start( length ),
-            end: timeRange.end( length )
-        });
-    }
-    return array;
-}
   
   String _getExt( String filename ) {
     return filename.split('.').last();
@@ -567,5 +559,6 @@ class SoundEvent {
   SoundEvent(this.idx, this.type, this.func);
   
 }
+
 
 
