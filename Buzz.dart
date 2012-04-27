@@ -1,61 +1,117 @@
 class Buzz {
   
   //
-  // Static methods implementation
+  // Static Properties
   //
+  static final defaults = const { 
+    "autoplay"    : false,
+    "duration"    : 5000,
+    "formats"     : const [],
+    "loop"        : false,
+    "placeholder" : "--",
+    "preload": "metadata",
+    "volume": 80
+  };
+  
+  static final types = const {
+      "mp3": "audio/mpeg",
+      "ogg": "audio/ogg",
+      "wav": "audio/wav",
+      "aac": "audio/aac",
+      "m4a": "audio/x-m4a"
+  };
+  
+  static var sounds = const [];
+  
+  //
+  // Instance Properties
+  //
+  var _el;
+    
+  //
+  // Singelton Implementation
+  //
+  static Buzz _singleRef;
+  
+  static Buzz get Instance() => _singleRef != null ? _singleRef : new Buzz();
+  
+  factory Buzz() {
+    if (_singleRef == null) {
+      _singleRef = new Buzz._internal();
+    }
+    
+    return _singleRef;
+  }
+
+  Buzz._internal() {
+    // Create the audio tag
+    _el = new Element.tag("audio");
+    
+    // Add the new element to the document
+    document.body.nodes.add(_el);
+  }
+  
+  
+  //
+  // Public Methods
+  //
+  
   
   /*
   * Check if the browser support for audio is present
   */
-  static bool get isSupported() {
-    return true; //!!buzz.el.canPlayType;
+  bool get isSupported() {
+    return (_el.canPlayType != null); 
   }
   
-  static bool get isOGGSupported() {
-    return false; //!!buzz.el.canPlayType && buzz.el.canPlayType( 'audio/ogg; codecs="vorbis"' );
+  bool get isOGGSupported() {
+    return true;
+    //return isSupported && (_el.canPlayType('audio/ogg; codecs="vorbis"', null) == "probably");
   }
 
-  static bool get isWAVSupported() {
-    return false; //!!buzz.el.canPlayType && buzz.el.canPlayType( 'audio/wav; codecs="1"' );
+  bool get isWAVSupported() {
+    return true;
+    //return isSupported && (_el.canPlayType('audio/wav; codecs="1"','')  == "probably");
   }
 
-  static bool get isMP3Supported() {
-    return false; //!!buzz.el.canPlayType && buzz.el.canPlayType( 'audio/mpeg;' );
+  bool get isMP3Supported() {
+    return true;
+    //return isSupported && (_el.canPlayType("audio/mpeg;",'')  == "probably");
   }
 
-  static bool get isAACSupported() {
-    return false; //!!buzz.el.canPlayType && ( buzz.el.canPlayType( 'audio/x-m4a;' ) || buzz.el.canPlayType( 'audio/aac;' ) );
+  bool get isAACSupported() {
+    return true;
+    //return isSupported && 
+      //  ( (_el.canPlayType( 'audio/x-m4a;','' ) == "probably") ||
+      //    (_el.canPlayType( 'audio/aac;','' ) )  == "probably");
   }
   
-  static String toTimer( time, withHours ) {
-    /*
-    var h, m, s;
-    h = Math.floor( time / 3600 );
-    h = isNaN( h ) ? '--' : ( h >= 10 ) ? h : '0' + h;
-    m = withHours ? Math.floor( time / 60 % 60 ) : Math.floor( time / 60 );
-    m = isNaN( m ) ? '--' : ( m >= 10 ) ? m : '0' + m;
-    s = Math.floor( time % 60 );
-    s = isNaN( s ) ? '--' : ( s >= 10 ) ? s : '0' + s;
-    return withHours ? h + ':' + m + ':' + s : m + ':' + s;
-    */
-    return "";
+  String toTimer(num time, bool withHours ) {
+    int h, m, s;
+    h = ( time / 3600 ).floor().toInt();
+    h = ( h ).isNaN() ? '--' : ( h >= 10 ) ? h : '0' + h;
+    m = withHours ? ( time / 60 % 60 ).floor().toInt() : ( time / 60 ).floor().toInt();
+    m = ( m ).isNaN() ? '--' : ( m >= 10 ) ? m : '0' + m;
+    s = ( time % 60 ).floor();
+    s = ( s ).isNaN() ? '--' : ( s >= 10 ) ? s : '0' + s;
+    return withHours ? "$h:$m:$s" : "$m:$s";
   }
 
-  static num fromTimer(time) {
-    /*
-    var splits = time.toString().split( ':' );
-    if ( splits && splits.length == 3 ) {
-        time = ( parseInt( splits[ 0 ], 10 ) * 3600 ) + ( parseInt(splits[ 1 ], 10 ) * 60 ) + parseInt( splits[ 2 ], 10 );
+  num fromTimer(String time) {
+    num retVal = 0;
+    var splits = time.split( ':' );
+    if ( splits != null && splits.length == 3 ) {
+      retVal = ( Math.parseInt( splits[ 0 ]) * 3600 ) + ( Math.parseInt(splits[ 1 ]) * 60 ) + Math.parseInt( splits[ 2 ]);
+        
     }
-    if ( splits && splits.length == 2 ) {
-        time = ( parseInt( splits[ 0 ], 10 ) * 60 ) + parseInt( splits[ 1 ], 10 );
+    if ( splits != null && splits.length == 2 ) {
+      retVal = ( Math.parseInt(splits[ 0 ]) * 60 ) + Math.parseInt( splits[ 1 ]);
     }
-    return time;
-    */
-    return 0;
+    
+    return retVal;
   }
 
-  static num toPercent( value, total, decimal ) {
+  num toPercent( value, total, decimal ) {
     /*
     var r = Math.pow( 10, decimal || 0 );
     return Math.round( ( ( value * 100 ) / total ) * r ) / r;
@@ -63,7 +119,7 @@ class Buzz {
     return 0;
   }
 
-  static num fromPercent( percent, total, decimal ) {
+  num fromPercent( percent, total, decimal ) {
     /*
     var r = Math.pow( 10, decimal || 0 );
     return  Math.round( ( ( total / 100 ) * percent ) * r ) / r;

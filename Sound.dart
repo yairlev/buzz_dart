@@ -25,7 +25,7 @@ class Sound {
   }
   
   Sound load() {
-      if (! Buzz.isSupported) {
+      if (! Buzz.Instance.isSupported) {
         return this;
       }
       
@@ -34,7 +34,7 @@ class Sound {
   }
   
   Sound play() { 
-    if (! Buzz.isSupported) {
+    if (! Buzz.Instance.isSupported) {
       return this;
     }
     
