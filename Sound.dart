@@ -1,43 +1,58 @@
 //#source('Buzz.dart');
 
 class Sound {
- 
-  var source;
+  
   SoundOptions options;
-  List<AudioElement> soundElements;
+  AudioElement sound;
   bool supported;
+  num volume;
+  num currentTime;
    
-  Sound (var source, [SoundOptions options = const SoundOptions()]) {
+  Sound (var sources, [SoundOptions options = const SoundOptions()]) {
     
-    this.supported = Buzz.Instance.isSupported;
+    List<String> sourceList;
     
-    this.soundElements = new List<AudioElement>();
-    
-    if (source is String) {
-      this.source = new List<String>();
-      this.source.add(source);
+    sound = new Element.tag('audio');
+    supported = Buzz.Instance.isSupported;        
+
+    if (sources is String) {
+      sourceList = new List<String>();
+      sourceList.add(sources);
     }
     else {
-      this.source = source;
+      sourceList = sources;
     }
-   
-    this.source.forEach((s){
-      var elem = new Element.tag('audio');
-      elem.attributes['src'] = s;
-      elem.attributes['type'] = SoundTypes[_getExt(s)];
+    
+    sourceList.forEach((s){
+      
+      _addSource(sound, s);
       
       if (options.loop) {
-        elem.attributes['loop'] = 'loop';
+        sound.attributes['loop'] = 'loop';
       }
       
       if (options.autoplay) {
-        elem.attributes['autoplay'] = 'autoplay';
+        sound.attributes['autoplay'] = 'autoplay';
       }
       
-      document.body.nodes.add(elem);
-      this.soundElements.add(elem);
-    });  
-           
+      if (options.preload == 'true') {
+        sound.attributes['preload'] = 'auto';
+      }
+      else if ( options.preload == 'false' ) {
+        sound.attributes['preload'] = 'none';
+      } 
+      else {
+        sound.attributes['preload'] = options.preload;
+      }       
+      
+      document.body.nodes.add(sound);
+      
+      this.setVolume( options.volume );
+      
+      Buzz.sounds.add(this);
+      
+    });    
+    
   }
   
   Sound load() {
@@ -45,7 +60,7 @@ class Sound {
         return this;
       }
       
-      this.soundElements.forEach((s){ s.load(); });
+      sound.load();
       return this;
   }
   
@@ -54,7 +69,7 @@ class Sound {
       return this;
     }
     
-    this.soundElements.forEach((s){ s.play(); });
+    this.sound.play();
   }
   
   Sound togglePlay() {
@@ -465,25 +480,31 @@ class Sound {
     return filename.split('.').last();
   }
   
+  _addSource( sound, src ) {
+    var srcElement = new Element.tag('source');
+    srcElement.attributes['src'] = src;
+    
+    var soundType = Buzz.types[ _getExt( src ) ];
+    
+    if ( soundType != null && !soundType.isEmpty()) {
+      srcElement.attributes['type'] = soundType;
+    }
+    sound.nodes.add( srcElement );  
+  }
 }
 
 
 class SoundOptions {
   
    final List<String> formats;
-   final preload;
+   final String preload;
    final bool autoplay;
    final bool loop;
+   final num volume;
    
    const SoundOptions([this.formats = const ['mp3', 'ogg', 'wav', 'aac', 'm4a'], 
-       this.preload='metadata', this.autoplay=true, this.loop=false]);       
+       this.preload='metadata', this.autoplay=true, this.loop=false, this.volume = 80]);       
    
 }
 
-var SoundTypes = const {
-  'mp3': 'audio/mpeg',
-  'ogg': 'audio/ogg',
-  'wav': 'audio/wav',
-  'aac': 'audio/aac',
-  'm4a': 'audio/x-m4a'
-};
+
