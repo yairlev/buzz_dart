@@ -7,23 +7,23 @@ class Buzz {
   /*
   * Check if the browser support for audio is present
   */
-  static bool isSupported() {
+  static bool get isSupported() {
     return true; //!!buzz.el.canPlayType;
   }
   
-  static bool isOGGSupported() {
+  static bool get isOGGSupported() {
     return false; //!!buzz.el.canPlayType && buzz.el.canPlayType( 'audio/ogg; codecs="vorbis"' );
   }
 
-  static bool isWAVSupported() {
+  static bool get isWAVSupported() {
     return false; //!!buzz.el.canPlayType && buzz.el.canPlayType( 'audio/wav; codecs="1"' );
   }
 
-  static bool isMP3Supported() {
+  static bool get isMP3Supported() {
     return false; //!!buzz.el.canPlayType && buzz.el.canPlayType( 'audio/mpeg;' );
   }
 
-  static bool isAACSupported() {
+  static bool get isAACSupported() {
     return false; //!!buzz.el.canPlayType && ( buzz.el.canPlayType( 'audio/x-m4a;' ) || buzz.el.canPlayType( 'audio/aac;' ) );
   }
   
