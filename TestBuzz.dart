@@ -44,8 +44,16 @@ void main() {
    * Yair's Tests for the Sund class
    */
   
-  var sound = new Sound(['sounds/ding.wav','sounds/truck.ogg']);
-  sound.play();
+  var yair_sound = new Sound(['sounds/ding.wav','sounds/truck.ogg']);
+  yair_sound.bind(['ended'], (e) => window.alert('') );
+  //sound.play();
+  
+  ButtonElement yair_b = document.query("#yair_play");
+  yair_b.on.click.add((Event e) { 
+    yair_sound.play();
+    }
+  );  
+  
   
   
   /*

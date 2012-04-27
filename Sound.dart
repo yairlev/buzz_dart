@@ -7,8 +7,10 @@ class Sound {
   bool supported;
   num volume;
   num currentTime;
+  List<SoundEvent> events;
    
-  Sound (var sources, [SoundOptions options = const SoundOptions()]) {
+  Sound (var sources, [SoundOptions options = const SoundOptions()]): events = new List<SoundEvent>()
+  {
     
     List<String> sourceList;
     
@@ -398,11 +400,40 @@ class Sound {
   }
   
   Sound bind(List<String> types, Function func) {
+    if ( !supported ) {
+      return this;
+    }
+
+    types.forEach((t) {
+      String idx = t;
+      String type = idx.split( '.' )[ 0 ];
+      events.add(new SoundEvent(idx, type, func));
+      sound.on[type].add(func);      
+    });    
     
+    return this;
   }
   
   Sound unbind(List<String> types) {
+    if ( !supported ) {
+      return this;
+    }
     
+    types.forEach((t) {
+      String idx = t;
+      String type = idx.split( '.' )[ 0 ];
+    
+      for(int i=0; i<events.length; i++) {
+        var namespace = events[i].idx.split( '.' );
+        if ( events[i].idx == idx || ( namespace[ 1 ] == idx.replaceAll( '.', '' ) ) ) {
+            sound.on[type].remove(events[i].func);
+            // remove event
+            events.removeRange(i, 1);
+        }
+      }      
+    });
+    
+    return this;
   }
   
   Sound bindOnce(List<String> types) {
@@ -524,8 +555,17 @@ class SoundOptions {
    final num volume;
    
    const SoundOptions([this.formats = const ['mp3', 'ogg', 'wav', 'aac', 'm4a'], 
-       this.preload='metadata', this.autoplay=true, this.loop=false, this.volume = 80]);       
+       this.preload='metadata', this.autoplay=false, this.loop=false, this.volume = 80]);       
    
+}
+
+class SoundEvent {
+  String idx;
+  String type;
+  Function func;
+  
+  SoundEvent(this.idx, this.type, this.func);
+  
 }
 
 
