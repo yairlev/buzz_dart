@@ -213,7 +213,7 @@ class Sound {
     return this.setVolume( this.volume - (value) );
   }
   
-  Sound setTime(num time) {
+  Sound setTime(double time) {
     if ( !supported ) {
       return this;
     }
@@ -221,17 +221,16 @@ class Sound {
     this.sound.currentTime = time;
     this.whenReady( () {
         this.sound.currentTime = time;
-        print('kaka $time  ${this.sound.currentTime}');
     });
     return this;
   }
   
-  num getTime() {
+  double getTime() {
     if ( !supported ) {
       return null;
     }
 
-    num time = ( this.sound.currentTime * 100 ).round() / 100;
+    double time = ( this.sound.currentTime * 100 ).round() / 100;
     return ( time ).isNaN() ? Buzz.defaults['placeholder'] : time;
   }
   
@@ -268,12 +267,12 @@ class Sound {
     return this.sound.playbackRate;
   }
   
-  num getDuration() {
+  double getDuration() {
     if ( !supported ) {
       return null;
     }
 
-    num duration = ( this.sound.duration * 100 ).round() / 100;
+    double duration = ( this.sound.duration * 100 ).round() / 100;
     return ( duration ).isNaN() ? Buzz.defaults['placeholder'] : duration;
     
   }
@@ -452,38 +451,32 @@ class Sound {
       return this;
     }
 
-    //TODO: support for null duration parameter
-    /*
-    if ( duration instanceof Function ) {
-        callback = duration;
-        duration = buzz.defaults.duration;
-    } else {
-        duration = duration || buzz.defaults.duration;
+    if ( duration == null ) {
+        duration = Buzz.defaults["duration"];
     }
-    */
 
-    var from = this.volume,
-    delay = duration / ( from - to ).abs(),
-        that = this;
+    num from = this.volume;
+    int delay = (duration / ( from - to ).abs()).toInt();
+    Sound that = this;
+
     this.play();
 
     Function doFade() {
         window.setTimeout(
           () {
             if ( from < to && that.volume < to ) {
-                that.setVolume( that.volume += 1 );
+                that.increaseVolume();
                 doFade();
             } else if ( from > to && that.volume > to ) {
-                that.setVolume( that.volume -= 1 );
+                that.decreaseVolume();
                 doFade();
             } else if ( callback != null ) {
-                //callback.apply( that );
+                callback();
             }
         }, delay );
     }
-    this.whenReady( () {
-        doFade();
-    });
+    
+    this.whenReady( () => doFade() );
 
     return this;
   }
