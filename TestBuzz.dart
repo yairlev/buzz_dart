@@ -61,12 +61,10 @@ void main() {
   LabelElement labelMsg = document.query("#statusMsg");
   LabelElement labelTime = document.query("#currTime");
   
-  Sound ysound = new Sound('sounds/ding.wav', new SoundOptions(
+  Sound ysound = new Sound('sounds/song.ogg', new SoundOptions(
     const ['mp3', 'ogg', 'wav', 'aac', 'm4a'],
     'metadata', false, false, 80
   ));
-  
-  ysound.whenReady(() => ysound.loop());
   
   ButtonElement test1b = document.query("#playSong");
   test1b.on.click.add((Event e) { 
@@ -152,6 +150,5 @@ void main() {
       }
       labelMsg.text = "${ysound.getPlayed().length}";
     });
-  
-  //ysound.whenReady(() {ysound.setSpeed(2);});
+
 }
