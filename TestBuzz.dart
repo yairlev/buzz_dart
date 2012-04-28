@@ -106,6 +106,11 @@ void main() {
   
   
   InputElement timeslider = document.query("#timeSlider");
+  
+  ysound.whenReady(() {
+    document.query("#endTime").text = Buzz.Instance.toTimer(ysound.getDuration(), false);  
+  });
+  
   timeslider.max = ysound.getDuration().toString();
   timeslider.on.change.add((Event e) {
     ysound.setTime(Math.parseDouble(timeslider.value));
