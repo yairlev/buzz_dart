@@ -1,0 +1,245 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Library Buzz / Class Buzz</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="Buzz" data-type="Buzz">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../Buzz.html">Buzz</a> &rsaquo; <a href="../Buzz/Buzz.html">Buzz</a></div>
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2>Class
+            <strong>Buzz</strong></h2>
+        
+<div class="doc">
+<p><a class="crossref" href="../Buzz/Buzz.html">Buzz</a> class is used as a singelton object and contains helper method
+to wotk with <a class="crossref" href="../Buzz/Sound.html">Sound</a> objects.</p>
+</div>
+<h3>Static Methods</h3>
+<div class="method"><h4 id="get:Instance">
+<span class="show-code">Code</span>
+<a href="../Buzz/Buzz.html">Buzz</a> <strong>get Instance</strong>() <a class="anchor-link" href="#get:Instance"
+              title="Permalink to Buzz.get Instance">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+static Buzz get Instance() =&gt; _singleRef != null ? _singleRef : new Buzz();
+</pre>
+</div>
+</div>
+<h3>Static Fields</h3>
+<div class="field"><h4 id="defaults">
+<span class="show-code">Code</span>
+final         <strong>defaults</strong> <a class="anchor-link"
+            href="#defaults"
+            title="Permalink to Buzz.defaults">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+static final defaults = const { 
+  "autoplay"    : false,
+  "duration"    : 5000,
+  "formats"     : const [],
+  "loop"        : false,
+  "placeholder" : "--",
+  "preload": "metadata",
+  "volume": 80
+};
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="sounds">
+<span class="show-code">Code</span>
+var         <strong>sounds</strong> <a class="anchor-link"
+            href="#sounds"
+            title="Permalink to Buzz.sounds">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+static var sounds = null;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="types">
+<span class="show-code">Code</span>
+final         <strong>types</strong> <a class="anchor-link"
+            href="#types"
+            title="Permalink to Buzz.types">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+static final types = const {
+    "mp3": "audio/mpeg",
+    "ogg": "audio/ogg",
+    "wav": "audio/wav",
+    "aac": "audio/aac",
+    "m4a": "audio/x-m4a"
+};
+</pre>
+</div>
+</div>
+<h3>Methods</h3>
+<div class="method"><h4 id="fromPercent">
+<span class="show-code">Code</span>
+<a href="../dart_core/num.html">num</a> <strong>fromPercent</strong>(<a href="../dart_core/num.html">num</a> percent, <a href="../dart_core/num.html">num</a> total, [<a href="../dart_core/num.html">num</a> decimal = 0]) <a class="anchor-link" href="#fromPercent"
+              title="Permalink to Buzz.fromPercent">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+num fromPercent( num percent, num total, [num decimal = 0] ) {
+  var r = Math.pow( 10, decimal );
+  return  ( ( ( total / 100 ) * percent ) * r ).round() / r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="fromTimer">
+<span class="show-code">Code</span>
+<a href="../dart_core/num.html">num</a> <strong>fromTimer</strong>(<a href="../dart_core/String.html">String</a> time) <a class="anchor-link" href="#fromTimer"
+              title="Permalink to Buzz.fromTimer">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+num fromTimer(String time) {
+  num retVal = 0;
+  var splits = time.split( ':' );
+  if ( splits != null &amp;&amp; splits.length == 3 ) {
+    retVal = ( Math.parseInt( splits[ 0 ]) * 3600 ) + ( Math.parseInt(splits[ 1 ]) * 60 ) + Math.parseInt( splits[ 2 ]);
+      
+  }
+  if ( splits != null &amp;&amp; splits.length == 2 ) {
+    retVal = ( Math.parseInt(splits[ 0 ]) * 60 ) + Math.parseInt( splits[ 1 ]);
+  }
+  
+  return retVal;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="get:isAACSupported">
+<span class="show-code">Code</span>
+<a href="../dart_core/bool.html">bool</a> <strong>get isAACSupported</strong>() <a class="anchor-link" href="#get:isAACSupported"
+              title="Permalink to Buzz.get isAACSupported">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool get isAACSupported() {
+  return true;
+  //return isSupported &amp;&amp; 
+    //  ( (_el.canPlayType( 'audio/x-m4a;','' ) == "probably") ||
+    //    (_el.canPlayType( 'audio/aac;','' ) )  == "probably");
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="get:isMP3Supported">
+<span class="show-code">Code</span>
+<a href="../dart_core/bool.html">bool</a> <strong>get isMP3Supported</strong>() <a class="anchor-link" href="#get:isMP3Supported"
+              title="Permalink to Buzz.get isMP3Supported">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool get isMP3Supported() {
+  return true;
+  //return isSupported &amp;&amp; (_el.canPlayType("audio/mpeg;",'')  == "probably");
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="get:isOGGSupported">
+<span class="show-code">Code</span>
+<a href="../dart_core/bool.html">bool</a> <strong>get isOGGSupported</strong>() <a class="anchor-link" href="#get:isOGGSupported"
+              title="Permalink to Buzz.get isOGGSupported">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool get isOGGSupported() {
+  return true;
+  //return isSupported &amp;&amp; (_el.canPlayType('audio/ogg; codecs="vorbis"', null) == "probably");
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="get:isSupported">
+<span class="show-code">Code</span>
+<a href="../dart_core/bool.html">bool</a> <strong>get isSupported</strong>() <a class="anchor-link" href="#get:isSupported"
+              title="Permalink to Buzz.get isSupported">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool get isSupported() {
+  return (_el.canPlayType != null); 
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="get:isWAVSupported">
+<span class="show-code">Code</span>
+<a href="../dart_core/bool.html">bool</a> <strong>get isWAVSupported</strong>() <a class="anchor-link" href="#get:isWAVSupported"
+              title="Permalink to Buzz.get isWAVSupported">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+bool get isWAVSupported() {
+  return true;
+  //return isSupported &amp;&amp; (_el.canPlayType('audio/wav; codecs="1"','')  == "probably");
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toPercent">
+<span class="show-code">Code</span>
+<a href="../dart_core/num.html">num</a> <strong>toPercent</strong>(<a href="../dart_core/num.html">num</a> value, <a href="../dart_core/num.html">num</a> total, [<a href="../dart_core/num.html">num</a> decimal = 0]) <a class="anchor-link" href="#toPercent"
+              title="Permalink to Buzz.toPercent">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+num toPercent( num value, num total, [num decimal = 0] ) {
+  var r = Math.pow( 10, decimal );
+  return ( ( ( value * 100 ) / total ) * r ).round() / r;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toTimer">
+<span class="show-code">Code</span>
+<a href="../dart_core/String.html">String</a> <strong>toTimer</strong>(<a href="../dart_core/num.html">num</a> time, <a href="../dart_core/bool.html">bool</a> withHours) <a class="anchor-link" href="#toTimer"
+              title="Permalink to Buzz.toTimer">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+String toTimer(num time, bool withHours ) {
+  int h, m, s;
+  h = ( time / 3600 ).floor().toInt();
+  h = ( h ).isNaN() ? '--' : ( h &gt;= 10 ) ? h : '0' + h;
+  m = withHours ? ( time / 60 % 60 ).floor().toInt() : ( time / 60 ).floor().toInt();
+  m = ( m ).isNaN() ? '--' : ( m &gt;= 10 ) ? m : '0' + m;
+  s = ( time % 60 ).floor();
+  s = ( s ).isNaN() ? '--' : ( s &gt;= 10 ) ? s : '0' + s;
+  return withHours ? "$h:$m:$s" : "$m:$s";
+}
+</pre>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        
+        <div class="footer"></div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

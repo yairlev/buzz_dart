@@ -1,0 +1,1037 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Library Buzz / Class Sound</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="Buzz" data-type="Sound">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../Buzz.html">Buzz</a> &rsaquo; <a href="../Buzz/Sound.html">Sound</a></div>
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2>Class
+            <strong>Sound</strong></h2>
+        
+<div class="doc">
+<p>Represents a single audio source.</p>
+</div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="Sound">
+<span class="show-code">Code</span>
+new <strong>Sound</strong>(sources, [<a href="../Buzz/SoundOptions.html">SoundOptions</a> options = const SoundOptions()]) <a class="anchor-link" href="#Sound"
+              title="Permalink to Sound.Sound">#</a></h4>
+<div class="doc">
+<p>Creates a new <a class="crossref" href="../Buzz/Sound.html">Sound</a> object.
+The 
+<span class="param">sources</span> property is a <code>List</code> of <code>String</code> values which contain the locations of all
+the available file types of an audio file.</p>
+<pre class="source">
+Sound (var sources, [SoundOptions options = const SoundOptions()]): events = new List&lt;SoundEvent&gt;()
+{
+  
+  List&lt;String&gt; sourceList;
+  
+  sound = new Element.tag('audio');
+  supported = Buzz.Instance.isSupported;        
+
+  if (sources is String) {
+    sourceList = new List&lt;String&gt;();
+    sourceList.add(sources);
+  }
+  else {
+    sourceList = sources;
+  }
+  
+  sourceList.forEach((s){
+    
+    _addSource(sound, s);
+    
+    if (options.loop) {
+      sound.attributes['loop'] = 'loop';
+    }
+    
+    if (options.autoplay) {
+      sound.attributes['autoplay'] = 'autoplay';
+    }
+    
+    if (options.preload == 'true') {
+      sound.attributes['preload'] = 'auto';
+    }
+    else if ( options.preload == 'false' ) {
+      sound.attributes['preload'] = 'none';
+    } 
+    else {
+      sound.attributes['preload'] = options.preload;
+    }       
+
+    document.body.nodes.add(sound);
+    
+    this.setVolume( options.volume );
+    
+    Buzz.sounds.add(this);
+    
+  });    
+  
+}
+</pre>
+</div>
+</div>
+<h3>Methods</h3>
+<div class="method"><h4 id="bind">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>bind</strong>(<a href="../dart_core/List.html">List</a> types, <a href="../dart_core/void.html">void</a> callback(<a href="../html/Event.html">Event</a> event)) <a class="anchor-link" href="#bind"
+              title="Permalink to Sound.bind">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Sound bind(List&lt;String&gt; types, EventListener callback) {
+  if ( !supported ) {
+    return this;
+  }
+
+  types.forEach((t) {
+    String idx = t;
+    String type = idx.split( '.' )[ 0 ];
+    events.add(new SoundEvent(idx, type, callback));
+    sound.on[type].add(callback);      
+  });    
+  
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="bindOnce">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>bindOnce</strong>(<a href="../dart_core/List.html">List</a> types, <a href="../dart_core/void.html">void</a> callback(<a href="../html/Event.html">Event</a> event)) <a class="anchor-link" href="#bindOnce"
+              title="Permalink to Sound.bindOnce">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Sound bindOnce(List&lt;String&gt; types, EventListener callback) {
+  if ( !supported ) {
+    return this;
+  }    
+  
+  types.forEach((t) {
+    var funcWrapper = (e) { callback(e); unbind( [t] ); };
+    bind([t], funcWrapper);
+  });    
+  
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="decreaseVolume">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>decreaseVolume</strong>([<a href="../dart_core/num.html">num</a> value = 1]) <a class="anchor-link" href="#decreaseVolume"
+              title="Permalink to Sound.decreaseVolume">#</a></h4>
+<div class="doc">
+<p>Decreases the volume by 1</p>
+<pre class="source">
+Sound decreaseVolume([num value = 1]) {
+  return this.setVolume( this.volume - (value) );
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="fadeIn">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>fadeIn</strong>(<a href="../dart_core/num.html">num</a> duration, <a href="../dart_core/Function.html">Function</a> callback) <a class="anchor-link" href="#fadeIn"
+              title="Permalink to Sound.fadeIn">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Sound fadeIn(num duration, Function callback) {
+  if ( !supported ) {
+    return this;
+  }
+
+  return this.setVolume(0).fadeTo( 100, duration, callback );
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="fadeOut">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>fadeOut</strong>(<a href="../dart_core/num.html">num</a> duration, <a href="../dart_core/Function.html">Function</a> callback) <a class="anchor-link" href="#fadeOut"
+              title="Permalink to Sound.fadeOut">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Sound fadeOut(num duration, Function callback) {
+  if ( !supported ) {
+    return this;
+  }
+
+  return this.fadeTo( 0, duration, callback );
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="fadeTo">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>fadeTo</strong>(<a href="../dart_core/num.html">num</a> to, <a href="../dart_core/num.html">num</a> duration, <a href="../dart_core/Function.html">Function</a> callback) <a class="anchor-link" href="#fadeTo"
+              title="Permalink to Sound.fadeTo">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Sound fadeTo(num to, num duration, Function callback) {
+  if ( !supported ) {
+    return this;
+  }
+
+  if ( duration == null ) {
+      duration = Buzz.defaults["duration"];
+  }
+
+  num from = this.volume;
+  int delay = (duration / ( from - to ).abs()).toInt();
+  Sound that = this;
+
+  this.play();
+
+  Function doFade() {
+      window.setTimeout(
+        () {
+          if ( from &lt; to &amp;&amp; that.volume &lt; to ) {
+              that.increaseVolume();
+              doFade();
+          } else if ( from &gt; to &amp;&amp; that.volume &gt; to ) {
+              that.decreaseVolume();
+              doFade();
+          } else if ( callback != null ) {
+              callback();
+          }
+      }, delay );
+  }
+  
+  this.whenReady( () =&gt; doFade() );
+
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getBuffered">
+<span class="show-code">Code</span>
+<a href="../html/TimeRanges.html">TimeRanges</a> <strong>getBuffered</strong>() <a class="anchor-link" href="#getBuffered"
+              title="Permalink to Sound.getBuffered">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+TimeRanges getBuffered() {
+  if ( !supported ) {
+    return null;
+  }
+
+  return this.sound.buffered;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getDuration">
+<span class="show-code">Code</span>
+<a href="../dart_core/double.html">double</a> <strong>getDuration</strong>() <a class="anchor-link" href="#getDuration"
+              title="Permalink to Sound.getDuration">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+double getDuration() {
+  if ( !supported ) {
+    return null;
+  }
+
+  double duration = ( this.sound.duration * 100 ).round() / 100;
+  return ( duration ).isNaN() ? Buzz.defaults['placeholder'] : duration;
+  
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getElementAttr">
+<span class="show-code">Code</span>
+<strong>getElementAttr</strong>(<a href="../dart_core/String.html">String</a> key) <a class="anchor-link" href="#getElementAttr"
+              title="Permalink to Sound.getElementAttr">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+getElementAttr(String key) {
+  if ( !supported ) {
+    return null;
+  }
+
+  return !key.isEmpty() &amp;&amp; key != null ? this.sound.attributes[ key ] : this.sound;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getErrorCode">
+<span class="show-code">Code</span>
+<a href="../dart_core/num.html">num</a> <strong>getErrorCode</strong>() <a class="anchor-link" href="#getErrorCode"
+              title="Permalink to Sound.getErrorCode">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+num getErrorCode() {
+  if ( supported &amp;&amp; this.sound.error != null ) {
+    return this.sound.error.code;
+  }
+  return 0;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getErrorMessage">
+<span class="show-code">Code</span>
+<a href="../dart_core/String.html">String</a> <strong>getErrorMessage</strong>() <a class="anchor-link" href="#getErrorMessage"
+              title="Permalink to Sound.getErrorMessage">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+String getErrorMessage() {
+  if ( !supported ) {
+    return null;
+  }
+
+  switch( this.getErrorCode() ) {
+      case 1:
+          return 'MEDIA_ERR_ABORTED';
+      case 2:
+          return 'MEDIA_ERR_NETWORK';
+      case 3:
+          return 'MEDIA_ERR_DECODE';
+      case 4:
+          return 'MEDIA_ERR_SRC_NOT_SUPPORTED';
+      default:
+          return null;
+  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getNetworkStateCode">
+<span class="show-code">Code</span>
+<strong>getNetworkStateCode</strong>() <a class="anchor-link" href="#getNetworkStateCode"
+              title="Permalink to Sound.getNetworkStateCode">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+getNetworkStateCode() {
+  if ( !supported ) {
+    return null;
+  }
+
+  return this.sound.networkState;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getNetworkStateMessage">
+<span class="show-code">Code</span>
+<a href="../dart_core/String.html">String</a> <strong>getNetworkStateMessage</strong>() <a class="anchor-link" href="#getNetworkStateMessage"
+              title="Permalink to Sound.getNetworkStateMessage">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+String getNetworkStateMessage() {
+  if ( !supported ) {
+    return null;
+  }
+
+  switch( this.getNetworkStateCode() ) {
+      case 0:
+          return 'NETWORK_EMPTY';
+      case 1:
+          return 'NETWORK_IDLE';
+      case 2:
+          return 'NETWORK_LOADING';
+      case 3:
+          return 'NETWORK_NO_SOURCE';
+      default:
+          return null;
+  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getPercent">
+<span class="show-code">Code</span>
+<a href="../dart_core/num.html">num</a> <strong>getPercent</strong>() <a class="anchor-link" href="#getPercent"
+              title="Permalink to Sound.getPercent">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+num getPercent() {
+  if ( !supported ) {
+    return null;
+  }
+
+  num percent = ( Buzz.Instance.toPercent( this.sound.currentTime, this.sound.duration ) ).round();
+  return ( percent ).isNaN() ? Buzz.defaults['placeholder'] : percent;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getPlayed">
+<span class="show-code">Code</span>
+<a href="../html/TimeRanges.html">TimeRanges</a> <strong>getPlayed</strong>() <a class="anchor-link" href="#getPlayed"
+              title="Permalink to Sound.getPlayed">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+TimeRanges getPlayed() {
+  if ( !supported ) {
+    return null;
+  }
+
+  return this.sound.played;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getSeekable">
+<span class="show-code">Code</span>
+<a href="../html/TimeRanges.html">TimeRanges</a> <strong>getSeekable</strong>() <a class="anchor-link" href="#getSeekable"
+              title="Permalink to Sound.getSeekable">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+TimeRanges getSeekable() {
+  if ( !supported ) {
+    return null;
+  }
+
+  return this.sound.seekable;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getSpeed">
+<span class="show-code">Code</span>
+<a href="../dart_core/num.html">num</a> <strong>getSpeed</strong>() <a class="anchor-link" href="#getSpeed"
+              title="Permalink to Sound.getSpeed">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+num getSpeed() {
+  if ( !supported ) {
+    return null;
+  }
+
+  return this.sound.playbackRate;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getStateCode">
+<span class="show-code">Code</span>
+<strong>getStateCode</strong>() <a class="anchor-link" href="#getStateCode"
+              title="Permalink to Sound.getStateCode">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+getStateCode() {
+  if ( !supported ) {
+    return null;
+  }
+
+  return this.sound.readyState;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getStateMessage">
+<span class="show-code">Code</span>
+<a href="../dart_core/String.html">String</a> <strong>getStateMessage</strong>() <a class="anchor-link" href="#getStateMessage"
+              title="Permalink to Sound.getStateMessage">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+String getStateMessage() {
+  if ( !supported ) {
+    return null;
+  }
+
+  switch( this.getStateCode() ) {
+      case 0:
+          return 'HAVE_NOTHING';
+      case 1:
+          return 'HAVE_METADATA';
+      case 2:
+          return 'HAVE_CURRENT_DATA';
+      case 3:
+          return 'HAVE_FUTURE_DATA';
+      case 4:
+          return 'HAVE_ENOUGH_DATA';
+      default:
+          return null;
+  }
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getTime">
+<span class="show-code">Code</span>
+<a href="../dart_core/double.html">double</a> <strong>getTime</strong>() <a class="anchor-link" href="#getTime"
+              title="Permalink to Sound.getTime">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+double getTime() {
+  if ( !supported ) {
+    return null;
+  }
+
+  double time = ( this.sound.currentTime * 100 ).round() / 100;
+  return ( time ).isNaN() ? Buzz.defaults['placeholder'] : time;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getVolume">
+<span class="show-code">Code</span>
+<a href="../dart_core/num.html">num</a> <strong>getVolume</strong>() <a class="anchor-link" href="#getVolume"
+              title="Permalink to Sound.getVolume">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+num getVolume() {
+  if ( !supported ) {
+    return 0;
+  }
+
+  return this.volume;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="increaseVolume">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>increaseVolume</strong>([<a href="../dart_core/num.html">num</a> value = 1]) <a class="anchor-link" href="#increaseVolume"
+              title="Permalink to Sound.increaseVolume">#</a></h4>
+<div class="doc">
+<p>Increases the volume by 1</p>
+<pre class="source">
+Sound increaseVolume([num value = 1]) {
+  return this.setVolume( this.volume + (value) );
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isEnded">
+<span class="show-code">Code</span>
+<a href="../dart_core/bool.html">bool</a> <strong>isEnded</strong>() <a class="anchor-link" href="#isEnded"
+              title="Permalink to Sound.isEnded">#</a></h4>
+<div class="doc">
+<p>Return whether the sound has ended - finished playing.</p>
+<pre class="source">
+bool isEnded() {
+  if ( !supported ) {
+    return null;
+  }
+
+  return this.sound.ended;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isMuted">
+<span class="show-code">Code</span>
+<a href="../dart_core/bool.html">bool</a> <strong>isMuted</strong>() <a class="anchor-link" href="#isMuted"
+              title="Permalink to Sound.isMuted">#</a></h4>
+<div class="doc">
+<p>Returns whether the must is active</p>
+<pre class="source">
+bool isMuted() {
+  if ( !supported ) {
+    return null;
+  }
+
+  return this.sound.muted;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="isPaused">
+<span class="show-code">Code</span>
+<a href="../dart_core/bool.html">bool</a> <strong>isPaused</strong>() <a class="anchor-link" href="#isPaused"
+              title="Permalink to Sound.isPaused">#</a></h4>
+<div class="doc">
+<p>Return whether the sound is paused</p>
+<pre class="source">
+bool isPaused() {
+  if ( !supported ) {
+    return null;
+  }
+
+  return this.sound.paused;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="load">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>load</strong>() <a class="anchor-link" href="#load"
+              title="Permalink to Sound.load">#</a></h4>
+<div class="doc">
+<p>Load the media of this sound</p>
+<pre class="source">
+Sound load() {
+    if (! supported) {
+      return this;
+    }
+    
+    sound.load();
+    return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="loop">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>loop</strong>() <a class="anchor-link" href="#loop"
+              title="Permalink to Sound.loop">#</a></h4>
+<div class="doc">
+<p>Enables replay when the sound play has ended</p>
+<pre class="source">
+Sound loop() {
+  if ( !supported ) {
+    return this;
+  }
+
+  this.sound.attributes['loop'] = 'loop';
+  bind( const ['ended.buzzloop'], (e) {
+      this.currentTime = 0;
+      this.play();
+  });
+  
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="mute">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>mute</strong>() <a class="anchor-link" href="#mute"
+              title="Permalink to Sound.mute">#</a></h4>
+<div class="doc">
+<p>Must the the sound</p>
+<pre class="source">
+Sound mute() {
+  if ( !supported ) {
+    return this;
+  }
+
+  this.sound.muted = true;
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="pause">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>pause</strong>() <a class="anchor-link" href="#pause"
+              title="Permalink to Sound.pause">#</a></h4>
+<div class="doc">
+<p>Pause the play of the sound if not paused</p>
+<pre class="source">
+Sound pause() {
+  if ( !supported ) {
+    return this;
+  }
+
+  this.sound.pause();
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="play">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>play</strong>() <a class="anchor-link" href="#play"
+              title="Permalink to Sound.play">#</a></h4>
+<div class="doc">
+<p>Start playing this sound from it's last position</p>
+<pre class="source">
+Sound play() { 
+  if (! supported) {
+    return this;
+  }
+  
+  this.sound.play();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="setElementAttr">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>setElementAttr</strong>(<a href="../dart_core/String.html">String</a> key, value) <a class="anchor-link" href="#setElementAttr"
+              title="Permalink to Sound.setElementAttr">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Sound setElementAttr(String key, var value) {
+  if ( !supported ) {
+    return this;
+  }
+
+  this.sound.attributes[ key ] = value;
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="setPercent">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>setPercent</strong>(<a href="../dart_core/num.html">num</a> percent) <a class="anchor-link" href="#setPercent"
+              title="Permalink to Sound.setPercent">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Sound setPercent(num percent) {
+  if ( !supported ) {
+    return this;
+  }
+
+  return this.setTime( Buzz.Instance.fromPercent( percent, this.sound.duration ) );
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="setSpeed">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>setSpeed</strong>(<a href="../dart_core/num.html">num</a> duration) <a class="anchor-link" href="#setSpeed"
+              title="Permalink to Sound.setSpeed">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Sound setSpeed(num duration) {
+  if ( !supported ) {
+    return this;
+  }
+
+  this.sound.playbackRate = duration;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="setTime">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>setTime</strong>(<a href="../dart_core/double.html">double</a> time) <a class="anchor-link" href="#setTime"
+              title="Permalink to Sound.setTime">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Sound setTime(double time) {
+  if ( !supported ) {
+    return this;
+  }
+
+  this.sound.currentTime = time;
+  this.whenReady( () {
+      this.sound.currentTime = time;
+  });
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="setVolume">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>setVolume</strong>(<a href="../dart_core/num.html">num</a> newVolume) <a class="anchor-link" href="#setVolume"
+              title="Permalink to Sound.setVolume">#</a></h4>
+<div class="doc">
+<p>Sets the volume - values can be (0-100)</p>
+<pre class="source">
+Sound setVolume(num newVolume) {
+  if ( !supported ) {
+    return this;
+  }
+
+  if ( newVolume &lt; 0 ) {
+    newVolume = 0;
+  }
+  if ( newVolume &gt; 100 ) {
+    newVolume = 100;
+  }
+
+  this.volume = newVolume;
+  this.sound.volume = newVolume / 100;
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="stop">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>stop</strong>() <a class="anchor-link" href="#stop"
+              title="Permalink to Sound.stop">#</a></h4>
+<div class="doc">
+<p>Stop playing the sound and reset the current position</p>
+<pre class="source">
+Sound stop() {
+  if ( !supported  ) {
+    return this;
+  }
+
+  this.setTime( this.getDuration() );
+  this.sound.pause();
+  return this; 
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="toggleMute">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>toggleMute</strong>() <a class="anchor-link" href="#toggleMute"
+              title="Permalink to Sound.toggleMute">#</a></h4>
+<div class="doc">
+<p>Toggle if the mute is active or not</p>
+<pre class="source">
+Sound toggleMute() {
+  if ( !supported ) {
+    return this;
+  }
+
+  this.sound.muted = !this.sound.muted;
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="togglePlay">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>togglePlay</strong>() <a class="anchor-link" href="#togglePlay"
+              title="Permalink to Sound.togglePlay">#</a></h4>
+<div class="doc">
+<p>Start or pause the play of the sound</p>
+<pre class="source">
+Sound togglePlay() {
+  if ( !supported ) {
+    return this;
+  }
+
+  if ( this.sound.paused ) {
+      this.sound.play();
+  } else {
+      this.sound.pause();
+  }
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="trigger">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>trigger</strong>(<a href="../dart_core/List.html">List</a> types) <a class="anchor-link" href="#trigger"
+              title="Permalink to Sound.trigger">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Sound trigger(List&lt;String&gt; types) {
+  
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="unbind">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>unbind</strong>(<a href="../dart_core/List.html">List</a> types) <a class="anchor-link" href="#unbind"
+              title="Permalink to Sound.unbind">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+Sound unbind(List&lt;String&gt; types) {
+  if ( !supported ) {
+    return this;
+  }
+  
+  types.forEach((t) {
+    String idx = t;
+    String type = idx.split( '.' )[ 0 ];
+  
+    for(int i=0; i&lt;events.length; i++) {
+      var namespace = events[i].idx.split( '.' );
+      if ( events[i].idx == idx ) {
+          sound.on[type].remove(events[i].callback);
+          // remove event
+          events.removeRange(i, 1);
+      }
+    }      
+  });
+  
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="unloop">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>unloop</strong>() <a class="anchor-link" href="#unloop"
+              title="Permalink to Sound.unloop">#</a></h4>
+<div class="doc">
+<p>Disables replay when the sound play has ended  </p>
+<pre class="source">
+Sound unloop() {
+  if ( !supported ) {
+    return this;
+  }
+
+  this.sound.attributes.remove( 'loop' );
+  this.unbind( const ['ended.buzzloop'] );
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="unmute">
+<span class="show-code">Code</span>
+<a href="../Buzz/Sound.html">Sound</a> <strong>unmute</strong>() <a class="anchor-link" href="#unmute"
+              title="Permalink to Sound.unmute">#</a></h4>
+<div class="doc">
+<p>Unmute the sound if muted</p>
+<pre class="source">
+Sound unmute() {
+  if ( !supported ) {
+    return this;
+  }
+
+  this.sound.muted = false;
+  return this;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="whenReady">
+<span class="show-code">Code</span>
+<a href="../dart_core/void.html">void</a> <strong>whenReady</strong>(<a href="../dart_core/Function.html">Function</a> func) <a class="anchor-link" href="#whenReady"
+              title="Permalink to Sound.whenReady">#</a></h4>
+<div class="doc">
+
+<pre class="source">
+void whenReady(Function func) {
+  if ( !supported ) {
+    return null;
+  }
+
+  var that = this;
+  if (this.sound.readyState != null &amp;&amp; this.sound.readyState == 0 ) {
+      this.bind( const ['canplay.buzzwhenready'], (e) =&gt; func());
+  } else {
+      func();
+  }
+}
+</pre>
+</div>
+</div>
+<h3>Fields</h3>
+<div class="field"><h4 id="currentTime">
+<span class="show-code">Code</span>
+<a href="../dart_core/num.html">num</a>         <strong>currentTime</strong> <a class="anchor-link"
+            href="#currentTime"
+            title="Permalink to Sound.currentTime">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+num currentTime;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="eventOncePid">
+<span class="show-code">Code</span>
+<a href="../dart_core/num.html">num</a>         <strong>eventOncePid</strong> <a class="anchor-link"
+            href="#eventOncePid"
+            title="Permalink to Sound.eventOncePid">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+num eventOncePid = 0;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="events">
+<span class="show-code">Code</span>
+<a href="../dart_core/List.html">List</a>         <strong>events</strong> <a class="anchor-link"
+            href="#events"
+            title="Permalink to Sound.events">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+List&lt;SoundEvent&gt; events;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="options">
+<span class="show-code">Code</span>
+<a href="../Buzz/SoundOptions.html">SoundOptions</a>         <strong>options</strong> <a class="anchor-link"
+            href="#options"
+            title="Permalink to Sound.options">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+SoundOptions options;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="sound">
+<span class="show-code">Code</span>
+<a href="../html/AudioElement.html">AudioElement</a>         <strong>sound</strong> <a class="anchor-link"
+            href="#sound"
+            title="Permalink to Sound.sound">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+AudioElement sound;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="supported">
+<span class="show-code">Code</span>
+<a href="../dart_core/bool.html">bool</a>         <strong>supported</strong> <a class="anchor-link"
+            href="#supported"
+            title="Permalink to Sound.supported">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+bool supported;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="volume">
+<span class="show-code">Code</span>
+<a href="../dart_core/num.html">num</a>         <strong>volume</strong> <a class="anchor-link"
+            href="#volume"
+            title="Permalink to Sound.volume">#</a>
+        </h4>
+        <div class="doc">
+
+<pre class="source">
+num volume;
+</pre>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        
+        <div class="footer"></div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
