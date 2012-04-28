@@ -1,0 +1,48 @@
+
+.sound_item {
+	color:#ffffff;
+    background-color: red;
+    cursor: pointer;
+}
+
+
+#volumeSlider {
+    position: absolute;
+}
+.volume {
+    position: absolute;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.volume input {
+    -webkit-appearance: slider-vertical;
+    height: 200px;
+    width: 20px;
+}
+
+.rangeOption {
+    position: absolute;
+    width: 450px;
+}
+
+.rangeOption input {
+    display:block;
+    width: 100%;
+}
+
+.rangeOption .minLabel {
+    float: left;
+}
+
+.rangeOption .minLabel label {
+    margin-left: -50%;
+}
+
+.rangeOption .maxLabel {
+    float: right;
+}
+
+.rangeOption .maxLabel label {
+    margin-left: 50%;
+}
