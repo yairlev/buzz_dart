@@ -45,7 +45,7 @@ void main() {
    */
   
   var yair_sound = new Sound(['sounds/ding.wav','sounds/truck.ogg']);
-  yair_sound.bind(['ended'], (e) => window.alert('') );
+  yair_sound.bindOnce(['ended'], (e) => window.alert('') );
   //sound.play();
   
   ButtonElement yair_b = document.query("#yair_play");

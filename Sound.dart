@@ -129,10 +129,11 @@ class Sound {
     }
 
     this.sound.attributes['loop'] = 'loop';
-    this.bind( const ['ended.buzzloop'], function() {
+    bind( const ['ended.buzzloop'], (e) {
         this.currentTime = 0;
         this.play();
     });
+    
     return this;
   }
   
@@ -402,7 +403,7 @@ class Sound {
     return !key.isEmpty() && key != null ? this.sound.attributes[ key ] : this.sound;
   }
   
-  Sound bind(List<String> types, Function func) {
+  Sound bind(List<String> types, EventListener callback) {
     if ( !supported ) {
       return this;
     }
@@ -410,8 +411,8 @@ class Sound {
     types.forEach((t) {
       String idx = t;
       String type = idx.split( '.' )[ 0 ];
-      events.add(new SoundEvent(idx, type, func));
-      sound.on[type].add(func);      
+      events.add(new SoundEvent(idx, type, callback));
+      sound.on[type].add(callback);      
     });    
     
     return this;
@@ -429,7 +430,7 @@ class Sound {
       for(int i=0; i<events.length; i++) {
         var namespace = events[i].idx.split( '.' );
         if ( events[i].idx == idx ) {
-            sound.on[type].remove(events[i].func);
+            sound.on[type].remove(events[i].callback);
             // remove event
             events.removeRange(i, 1);
         }
@@ -439,12 +440,12 @@ class Sound {
     return this;
   }
   
-  Sound bindOnce(List<String> types, Function func) {
+  Sound bindOnce(List<String> types, EventListener callback) {
     if ( !supported ) {
       return this;
     }
 
-    var funcWrapper = (e) { func(); unbind( types ); };
+    var funcWrapper = (e) { callback(e); unbind( types ); };
     
     bind(types, funcWrapper);
     
@@ -554,9 +555,9 @@ class SoundOptions {
 class SoundEvent {
   String idx;
   String type;
-  Function func;
+  EventListener callback;
   
-  SoundEvent(this.idx, this.type, this.func);
+  SoundEvent(this.idx, this.type, this.callback);
   
 }
 
