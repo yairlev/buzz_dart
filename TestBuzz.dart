@@ -1,7 +1,5 @@
-#import('dart:html');
-#import('dart:core');
-#source('Sound.dart');
-#source('Buzz.dart');
+#import("dart:html");
+#import("Buzz.dart");
 
 void main() {
   
@@ -107,19 +105,50 @@ void main() {
   
   
   InputElement timeslider = document.query("#timeSlider");
+  timeslider.disabled = true;
   
   ysound.whenReady(() {
-    document.query("#endTime").text = Buzz.Instance.toTimer(ysound.getDuration(), false);  
+    document.query("#endTime").text = Buzz.Instance.toTimer(ysound.getDuration(), false);
+    timeslider.max = ysound.getDuration().toString();
+    timeslider.disabled = false;
   });
   
-  timeslider.max = ysound.getDuration().toString();
+  
   timeslider.on.change.add((Event e) {
+    print('slaider change vlaue to: ${timeslider.value}');
     ysound.setTime(Math.parseDouble(timeslider.value));
   }, true);
   
-  window.setInterval(() {
-      labelTime.text = "${Buzz.Instance.toTimer(ysound.getTime(), false)} (${ysound.getPercent()}%)";
-      slider.value = ysound.getVolume().toString();
-    }
-    , 500);
+  //window.setInterval(() {
+      //labelTime.text = "${Buzz.Instance.toTimer(ysound.getTime(), false)} (${ysound.getPercent()}%)";
+      //slider.value = ysound.getVolume().toString();
+      //timeslider.value = ysound.getTime().toString();
+    //}
+    //, 500);
+  
+  /*
+  ysound.bind(const [
+    "abort", "canplay", "canplaythrough", "durationchange", "emptied", "ended", "error", "loadeddata", "loadedmetadata", "loadstart", "pause", "play", "playing", "progress", "ratechange", "seeked", "seeking", "stalled", "suspend", "timeupdate", "volumechange", "waiting" 
+                     ],
+    (Event e) {
+      document.query("#logArea").nodes.add(new Element.html("<li>${e.type}</li>"));
+      document.query("#logArea").scrollByPages(9999);
+  });
+  */
+  
+  ysound.bind(const ["volumechange.slider"], (e) {slider.value = ysound.getVolume().toString();});
+  ysound.bind(const ["timeupdate.slider"], (e) {
+    labelTime.text = "${Buzz.Instance.toTimer(ysound.getTime(), false)} (${ysound.getPercent()}%)";
+    timeslider.value = ysound.getTime().toString();
+    });
+  ysound.bind(const ["timeupdate.ranges"], (e) {
+      document.query("#logArea").nodes.clear();
+      TimeRanges ranges = ysound.getPlayed();
+      int rangesCount = ranges.length;
+      for (int idx = 0; idx < rangesCount; idx++) {
+        document.query("#logArea").nodes.add(new Element.html("<li>$idx- ${ranges.start(idx)} - ${ranges.end(idx)}</li>"));
+      }
+      labelMsg.text = "${ysound.getPlayed().length}";
+    });
+
 }

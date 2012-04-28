@@ -1,5 +1,6 @@
-//#source('Buzz.dart');
-
+/**
+* Represents a single audio source.
+*/
 class Sound {
   
   SoundOptions options;
@@ -10,6 +11,11 @@ class Sound {
   List<SoundEvent> events;
   num eventOncePid = 0;
    
+  /**
+  * Creates a new [Sound] object.
+  * The [sources] property is a [List] of [String] values which contain the locations of all
+  * the available file types of an audio file.
+  */
   Sound (var sources, [SoundOptions options = const SoundOptions()]): events = new List<SoundEvent>()
   {
     
@@ -58,6 +64,7 @@ class Sound {
     
   }
   
+  /// Load the media of this sound
   Sound load() {
       if (! supported) {
         return this;
@@ -67,6 +74,8 @@ class Sound {
       return this;
   }
   
+  
+  /// Start playing this sound from it's last position
   Sound play() { 
     if (! supported) {
       return this;
@@ -75,6 +84,7 @@ class Sound {
     this.sound.play();
   }
   
+  /// Start or pause the play of the sound
   Sound togglePlay() {
     if ( !supported ) {
       return this;
@@ -88,6 +98,7 @@ class Sound {
     return this;
   }
   
+  /// Pause the play of the sound if not paused
   Sound pause() {
     if ( !supported ) {
       return this;
@@ -97,6 +108,7 @@ class Sound {
     return this;
   }
   
+  /// Return whether the sound is paused
   bool isPaused() {
     if ( !supported ) {
       return null;
@@ -105,6 +117,7 @@ class Sound {
     return this.sound.paused;
   }
   
+  /// Stop playing the sound and reset the current position
   Sound stop() {
     if ( !supported  ) {
       return this;
@@ -115,6 +128,7 @@ class Sound {
     return this; 
   }
   
+  /// Return whether the sound has ended - finished playing.
   bool isEnded() {
     if ( !supported ) {
       return null;
@@ -123,6 +137,7 @@ class Sound {
     return this.sound.ended;
   }
   
+  /// Enables replay when the sound play has ended
   Sound loop() {
     if ( !supported ) {
       return this;
@@ -137,6 +152,7 @@ class Sound {
     return this;
   }
   
+  /// Disables replay when the sound play has ended  
   Sound unloop() {
     if ( !supported ) {
       return this;
@@ -147,6 +163,7 @@ class Sound {
     return this;
   }
   
+  /// Must the the sound
   Sound mute() {
     if ( !supported ) {
       return this;
@@ -156,6 +173,7 @@ class Sound {
     return this;
   }
   
+  /// Unmute the sound if muted
   Sound unmute() {
     if ( !supported ) {
       return this;
@@ -165,6 +183,7 @@ class Sound {
     return this;
   }
   
+  /// Toggle if the mute is active or not
   Sound toggleMute() {
     if ( !supported ) {
       return this;
@@ -174,6 +193,7 @@ class Sound {
     return this;
   }
   
+  /// Returns whether the must is active
   bool isMuted() {
     if ( !supported ) {
       return null;
@@ -182,6 +202,7 @@ class Sound {
     return this.sound.muted;
   }
   
+  /// Sets the volume - values can be (0-100)
   Sound setVolume(num newVolume) {
     if ( !supported ) {
       return this;
@@ -207,10 +228,12 @@ class Sound {
     return this.volume;
   }
   
+  /// Increases the volume by 1
   Sound increaseVolume([num value = 1]) {
     return this.setVolume( this.volume + (value) );
   }
   
+  /// Decreases the volume by 1
   Sound decreaseVolume([num value = 1]) {
     return this.setVolume( this.volume - (value) );
   }
@@ -446,8 +469,8 @@ class Sound {
     }    
     
     types.forEach((t) {
-      var funcWrapper = (e) { callback(e); unbind( t ); };
-      bind(t, funcWrapper);
+      var funcWrapper = (e) { callback(e); unbind( [t] ); };
+      bind([t], funcWrapper);
     });    
     
   }
@@ -514,7 +537,7 @@ class Sound {
 
     var that = this;
     if (this.sound.readyState != null && this.sound.readyState == 0 ) {
-        this.bind( const ['canplay.buzzwhenready'], func);
+        this.bind( const ['canplay.buzzwhenready'], (e) => func());
     } else {
         func();
     }
@@ -526,7 +549,7 @@ class Sound {
     return filename.split('.').last();
   }
   
-  _addSource( sound, src ) {
+  _addSource( soundElem, src ) {
     var srcElement = new Element.tag('source');
     srcElement.attributes['src'] = src;
     
@@ -535,11 +558,13 @@ class Sound {
     if ( soundType != null && !soundType.isEmpty()) {
       srcElement.attributes['type'] = soundType;
     }
-    sound.nodes.add( srcElement );  
+    soundElem.nodes.add( srcElement );  
   }
 }
 
 
+/// This class defines the options to create a sound with
+/// * formats can be (OGG MP3 WAV AAC)
 class SoundOptions {
   
    final List<String> formats;
@@ -553,6 +578,7 @@ class SoundOptions {
    
 }
 
+/// Internal class that keeps track of event bindings
 class SoundEvent {
   String idx;
   String type;

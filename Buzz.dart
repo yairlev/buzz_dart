@@ -1,3 +1,14 @@
+#library('Buzz');
+
+#import('dart:html');
+#import('dart:core');
+
+#source('sound.dart');
+
+/**
+* [Buzz] class is used as a singelton object and contains helper method
+* to wotk with [Sound] objects.
+*/
 class Buzz {
   
   //
