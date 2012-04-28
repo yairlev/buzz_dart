@@ -45,10 +45,11 @@ void main() {
    */
   
   var yair_sound = new Sound(['sounds/ding.wav','sounds/truck.ogg']);
-  yair_sound.bindOnce(['ended'], (e) => window.alert('') );
-  //sound.play();
+  //yair_sound.bind(['ended'], (e) => window.alert('bounded') );
+  //yair_sound.bindOnce(['ended'], (e) => window.alert('bounded once') );
+
   
-  ButtonElement yair_b = document.query("#yair_play");
+  ButtonElement yair_b = document.query("#yair_play_bind_once");
   yair_b.on.click.add((Event e) { 
     yair_sound.play();
     }

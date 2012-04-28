@@ -443,11 +443,12 @@ class Sound {
   Sound bindOnce(List<String> types, EventListener callback) {
     if ( !supported ) {
       return this;
-    }
-
-    var funcWrapper = (e) { callback(e); unbind( types ); };
+    }    
     
-    bind(types, funcWrapper);
+    types.forEach((t) {
+      var funcWrapper = (e) { callback(e); unbind( t ); };
+      bind(t, funcWrapper);
+    });    
     
   }
   
