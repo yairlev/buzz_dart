@@ -1,7 +1,5 @@
-#import('dart:html');
-#import('dart:core');
-#source('Sound.dart');
-#source('Buzz.dart');
+#import("dart:html");
+#import("Buzz.dart");
 
 void main() {
   
@@ -63,10 +61,12 @@ void main() {
   LabelElement labelMsg = document.query("#statusMsg");
   LabelElement labelTime = document.query("#currTime");
   
-  Sound ysound = new Sound('sounds/song.ogg', new SoundOptions(
+  Sound ysound = new Sound('sounds/ding.wav', new SoundOptions(
     const ['mp3', 'ogg', 'wav', 'aac', 'm4a'],
     'metadata', false, false, 80
   ));
+  
+  ysound.whenReady(() => ysound.loop());
   
   ButtonElement test1b = document.query("#playSong");
   test1b.on.click.add((Event e) { 
@@ -109,7 +109,7 @@ void main() {
   InputElement timeslider = document.query("#timeSlider");
   timeslider.disabled = true;
   
-  ysound.whenReady((e) {
+  ysound.whenReady(() {
     document.query("#endTime").text = Buzz.Instance.toTimer(ysound.getDuration(), false);
     timeslider.max = ysound.getDuration().toString();
     timeslider.disabled = false;
@@ -143,6 +143,15 @@ void main() {
     labelTime.text = "${Buzz.Instance.toTimer(ysound.getTime(), false)} (${ysound.getPercent()}%)";
     timeslider.value = ysound.getTime().toString();
     });
+  ysound.bind(const ["timeupdate.ranges"], (e) {
+      document.query("#logArea").nodes.clear();
+      TimeRanges ranges = ysound.getPlayed();
+      int rangesCount = ranges.length;
+      for (int idx = 0; idx < rangesCount; idx++) {
+        document.query("#logArea").nodes.add(new Element.html("<li>$idx- ${ranges.start(idx)} - ${ranges.end(idx)}</li>"));
+      }
+      labelMsg.text = "${ysound.getPlayed().length}";
+    });
   
-  ysound.bindOnce(const ["volumechange.1", "volumechange.2"], (e) => window.alert("asd")); 
+  //ysound.whenReady(() {ysound.setSpeed(2);});
 }
