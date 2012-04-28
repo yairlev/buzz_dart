@@ -8,6 +8,7 @@ class Sound {
   num volume;
   num currentTime;
   List<SoundEvent> events;
+  num eventOncePid = 0;
    
   Sound (var sources, [SoundOptions options = const SoundOptions()]): events = new List<SoundEvent>()
   {
@@ -428,7 +429,7 @@ class Sound {
     
       for(int i=0; i<events.length; i++) {
         var namespace = events[i].idx.split( '.' );
-        if ( events[i].idx == idx || ( namespace[ 1 ] == idx.replaceAll( '.', '' ) ) ) {
+        if ( events[i].idx == idx ) {
             sound.on[type].remove(events[i].func);
             // remove event
             events.removeRange(i, 1);
@@ -439,7 +440,14 @@ class Sound {
     return this;
   }
   
-  Sound bindOnce(List<String> types) {
+  Sound bindOnce(List<String> types, Function func) {
+    if ( !supported ) {
+      return this;
+    }
+
+    var funcWrapper = (e) { func(); unbind( types ); };
+    
+    bind(types, funcWrapper);
     
   }
   
