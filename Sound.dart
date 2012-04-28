@@ -46,7 +46,7 @@ class Sound {
       else {
         sound.attributes['preload'] = options.preload;
       }       
-      
+
       document.body.nodes.add(sound);
       
       this.setVolume( options.volume );
@@ -109,9 +109,8 @@ class Sound {
       return this;
     }
 
-    //this.setTime( this.getDuration() );
+    this.setTime( this.getDuration() );
     this.sound.pause();
-    this.setTime( 0 );
     return this; 
   }
   
