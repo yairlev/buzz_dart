@@ -38,23 +38,8 @@ void main() {
   print("fromPercent(0, 0, 2): ${Buzz.Instance.fromPercent(0, 0, 2)}");
   print("fromPercent(100, 0, 2): ${Buzz.Instance.fromPercent(100, 0, 2)}");
  
-  /*
-   * Yair's Tests for the Sund class
-   */
   
-  var yair_sound = new Sound(['sounds/ding.wav','sounds/truck.ogg']);
-  //yair_sound.bind(['ended'], (e) => window.alert('bounded') );
-  //yair_sound.bindOnce(['ended'], (e) => window.alert('bounded once') );
-
-  
-  ButtonElement yair_b = document.query("#yair_play_bind_once");
-  yair_b.on.click.add((Event e) { 
-    yair_sound.play();
-    }
-  );  
-  
-  
-  
+ 
   /*
   * Yoad's Tests for the Sund class
   */
@@ -119,22 +104,7 @@ void main() {
     ysound.setTime(Math.parseDouble(timeslider.value));
   }, true);
   
-  //window.setInterval(() {
-      //labelTime.text = "${Buzz.Instance.toTimer(ysound.getTime(), false)} (${ysound.getPercent()}%)";
-      //slider.value = ysound.getVolume().toString();
-      //timeslider.value = ysound.getTime().toString();
-    //}
-    //, 500);
-  
-  /*
-  ysound.bind(const [
-    "abort", "canplay", "canplaythrough", "durationchange", "emptied", "ended", "error", "loadeddata", "loadedmetadata", "loadstart", "pause", "play", "playing", "progress", "ratechange", "seeked", "seeking", "stalled", "suspend", "timeupdate", "volumechange", "waiting" 
-                     ],
-    (Event e) {
-      document.query("#logArea").nodes.add(new Element.html("<li>${e.type}</li>"));
-      document.query("#logArea").scrollByPages(9999);
-  });
-  */
+
   
   ysound.bind(const ["volumechange.slider"], (e) {slider.value = ysound.getVolume().toString();});
   ysound.bind(const ["timeupdate.slider"], (e) {
@@ -150,5 +120,96 @@ void main() {
       }
       labelMsg.text = "${ysound.getPlayed().length}";
     });
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /*
+   * Yoad's Tests for the Sund class
+   */
+   LabelElement labelMsg2 = document.query("#statusMsg2");
+   LabelElement labelTime2 = document.query("#currTime2");
+   
+   Sound ysound2 = new Sound('sounds/a-party.ogg', new SoundOptions(
+     const ['mp3', 'ogg', 'wav', 'aac', 'm4a'],
+     'metadata', false, false, 80
+   ));
+   
+   ButtonElement test1b2 = document.query("#playSong2");
+   test1b2.on.click.add((Event e) { 
+       ysound2.play();
+     }
+   );
+   
+   test1b2 = document.query("#pauseSong2");
+   test1b2.on.click.add((Event e) { 
+       ysound2.pause();
+     }
+   ); 
+   
+   test1b2 = document.query("#stopSong2");
+   test1b2.on.click.add((Event e) { 
+       ysound2.stop();
+     }
+   );
+   
+   test1b2 = document.query("#fadeOut2");
+   test1b2.on.click.add((Event e) { 
+       ysound2.fadeOut(2500, () {labelMsg2.text = "Fadeout Done";});
+     }
+   );
+   
+   test1b2 = document.query("#fadeIn2");
+   test1b2.on.click.add((Event e) { 
+       ysound2.fadeIn(2500, () {labelMsg2.text = "Fadein Done";});
+     }
+   );
+   
+   
+   
+   InputElement slider2 = document.query("#volumeSlider2");
+   slider2.on.change.add((Event e) {
+     ysound2.setVolume(Math.parseInt(slider2.value));
+   }, true);
+   
+   
+  
+   InputElement timeslider2 = document.query("#timeSlider2");
+   timeslider2.disabled = true;
+   
+   ysound2.whenReady(() {
+     document.query("#endTime2").text = Buzz.Instance.toTimer(ysound2.getDuration(), false);
+     timeslider2.max = ysound2.getDuration().toString();
+     timeslider2.disabled = false;
+   });
+   
+  
+   timeslider2.on.change.add((Event e) {
+     print('slaider change vlaue to: ${timeslider2.value}');
+     ysound2.setTime(Math.parseDouble(timeslider2.value));
+   }, true);
+   
+
+   
+   ysound2.bind(const ["volumechange.slider"], (e) {slider2.value = ysound2.getVolume().toString();});
+   ysound2.bind(const ["timeupdate.slider"], (e) {
+     labelTime2.text = "${Buzz.Instance.toTimer(ysound2.getTime(), false)} (${ysound2.getPercent()}%)";
+     timeslider2.value = ysound2.getTime().toString();
+     });
+   ysound2.bind(const ["timeupdate.ranges"], (e) {
+       document.query("#logArea2").nodes.clear();
+       TimeRanges ranges = ysound2.getPlayed();
+       int rangesCount = ranges.length;
+       for (int idx = 0; idx < rangesCount; idx++) {
+         document.query("#logArea2").nodes.add(new Element.html("<li>$idx- ${ranges.start(idx)} - ${ranges.end(idx)}</li>"));
+       }
+       labelMsg2.text = "${ysound2.getPlayed().length}";
+     });
+
 
 }

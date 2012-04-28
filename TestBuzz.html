@@ -9,7 +9,7 @@
     <script type="application/dart" src="TestBuzz.dart"></script>
     <script src="http://dart.googlecode.com/svn/branches/bleeding_edge/dart/client/dart.js"></script>
     
-    <div id='yoadTests'>
+    <div id='yoadTests' style="float:left;">
     	<div>
     		<label id="statusMsg">---</label>
     		<label id="currTime"/>
@@ -37,10 +37,34 @@
         
         <ul id="logArea" style="margin-top:25px;width:50%;height:200px;overflow:auto;list-style:none;" />
     </div>
-    <div id='yairTests' style="margin-top:50px;">
-    	<input id="yair_play_bind" type="button" value="playSong bind" >
-    	<input id="yair_play_bind_once" type="button" value="playSong bind once" />
-    	<input id="yair_pause" type="button" value="pauseSong" />
+    
+    <div id='yoadTests2' style="float:left; margin-left:100px;">
+    	<div>
+    		<label id="statusMsg2">---</label>
+    		<label id="currTime2"/>
+    	</div>
+    	<div>
+    		<input id="playSong2" type="button" value="playSong" />
+    		<input id="pauseSong2" type="button" value="pauseSong" />
+    		<input id="stopSong2" type="button" value="stopSong" />
+    		<input id="fadeOut2" type="button" value="fadeOut" />
+    		<input id="fadeIn2" type="button" value="fadeIn" />
+    	</div>
+    	<div class="rangeOption">
+    		Volume:
+	    	<input id="volumeSlider2" type="range" max="100" value="0" />
+	    	<label class="minLabel">0</label>
+	        <label class="maxLabel">100</label>
+        </div>
+        
+        <div class="rangeOption" style="margin-top:25px">
+        	Time:
+	    	<input id="timeSlider2" type="range" max="0" value="0" />
+	    	<label id="startTime2" class="minLabel"></label>
+	        <label id="endTime2" class="maxLabel"></label>
+        </div>
+        
+        <ul id="logArea2" style="margin-top:25px;width:50%;height:200px;overflow:auto;list-style:none;" />
     </div>
     
   </body>
