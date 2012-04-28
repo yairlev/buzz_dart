@@ -15,19 +15,31 @@
     
     <div id='yoadTests'>
     	<div>
-    		<input id="playSong" type="button" value="playSong" />
-    		<input id="pauseSong" type="button" value="pauseSong" />
-    		<input id="stopSong" type="button" value="stopSong" />
-    	
+    		<label id="statusMsg">---</label>
     		<label id="currTime"/>
     	</div>
     	<div>
+    		<input id="playSong" type="button" value="playSong" />
+    		<input id="pauseSong" type="button" value="pauseSong" />
+    		<input id="stopSong" type="button" value="stopSong" />
+    		<input id="fadeOut" type="button" value="fadeOut" />
+    		<input id="fadeIn" type="button" value="fadeIn" />
+    	</div>
+    	<div class="rangeOption">
+    		Volume:
 	    	<input id="volumeSlider" type="range" max="100" value="0" />
-	        <label>0</label>
-	        <label>100</label>
+	    	<label class="minLabel">0</label>
+	        <label class="maxLabel">100</label>
+        </div>
+        
+        <div class="rangeOption" style="margin-top:25px">
+        	Time:
+	    	<input id="timeSlider" type="range" max="0" value="0" />
+	    	<label id="startTime" class="minLabel"></label>
+	        <label id="endTime" class="maxLabel"></label>
         </div>
     </div>
-    <div id='yairTests'>
+    <div id='yairTests' style="margin-top:50px;">
     	<input id="yair_play" type="button" value="playSong" />
     	<input id="yair_pause" type="button" value="pauseSong" />
     </div>

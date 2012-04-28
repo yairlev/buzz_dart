@@ -59,6 +59,9 @@ void main() {
   /*
   * Yoad's Tests for the Sund class
   */
+  LabelElement labelMsg = document.query("#statusMsg");
+  LabelElement labelTime = document.query("#currTime");
+  
   Sound ysound = new Sound('sounds/song.ogg', new SoundOptions(
     const ['mp3', 'ogg', 'wav', 'aac', 'm4a'],
     'metadata', false, false, 80
@@ -82,15 +85,35 @@ void main() {
     }
   );
   
+  test1b = document.query("#fadeOut");
+  test1b.on.click.add((Event e) { 
+      ysound.fadeOut(2500, () {labelMsg.text = "Fadeout Done";});
+    }
+  );
+  
+  test1b = document.query("#fadeIn");
+  test1b.on.click.add((Event e) { 
+      ysound.fadeIn(2500, () {labelMsg.text = "Fadein Done";});
+    }
+  );
+  
   
   InputElement slider = document.query("#volumeSlider");
   slider.on.change.add((Event e) {
     ysound.setVolume(Math.parseInt(slider.value));
   }, true);
   
-  LabelElement label = document.query("#currTime");
+  
+  
+  InputElement timeslider = document.query("#timeSlider");
+  timeslider.max = ysound.getDuration().toString();
+  timeslider.on.change.add((Event e) {
+    ysound.setTime(Math.parseDouble(timeslider.value));
+  }, true);
+  
   window.setInterval(() {
-      label.text = "${Buzz.Instance.toTimer(ysound.getTime(), false)} (${ysound.getPercent()}%)";
+      labelTime.text = "${Buzz.Instance.toTimer(ysound.getTime(), false)} (${ysound.getPercent()}%)";
+      slider.value = ysound.getVolume().toString();
     }
-    , 1000);
+    , 500);
 }
